@@ -5,7 +5,9 @@ const Notification = require("../models/Notification");
 const Student = require("../models/Student");
 const sendEmail = require("../utils/sendEmail"); // Utility function for sending emails
 const schedule = require("node-schedule");
+const { DateTime } = require('luxon');
 const notificationQueue = new Queue("notification-queue");
+
 notificationQueue.process(async (job) => {
   const { notificationId, daysBefore } = job.data;
   const notification = await Notification.findById(notificationId);
@@ -53,10 +55,16 @@ const sendEmailsToStudents = async (students, title, message, deadline) => {
 const scheduleNotificationReminders = async (notification) => {
   const intervals = [15, 10, 5, 3, 1]; // Days before the deadline
 
+  // Convert deadline from IST to Pacific Time (US West)
+  const deadlineInOregonTime = DateTime.fromISO(notification.deadline, { zone: 'Asia/Kolkata' }) // IST
+    .setZone('America/Los_Angeles') // Convert to Oregon time (Pacific Time)
+    .toJSDate(); // Convert back to a JavaScript Date object
+
   for (const daysBefore of intervals) {
-    const notificationDate = new Date(notification.deadline);
+    const notificationDate = new Date(deadlineInOregonTime);
     notificationDate.setDate(notificationDate.getDate() - daysBefore);
 
+    // If the scheduled reminder time is in the future
     if (notificationDate > new Date()) {
       try {
         await notificationQueue.add(
