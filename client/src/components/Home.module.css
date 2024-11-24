@@ -1,0 +1,230 @@
+/* Reset & Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+.main {
+  height: 100vh;
+  background-image: url("https://tse4.mm.bing.net/th?id=OIP.SigcDJ2htNTuQa1JuI2k8QHaEK&pid=Api&P=0&h=180");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-color: #666;
+}
+
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+/* Navbar Styling */
+.home-navbar {
+  background-color: #1f3a93;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  animation: slideInNav 0.8s ease-out;
+}
+
+.home-navbar h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #e3f2fd;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.home-navbar h1:hover {
+  color: #c5d9f6;
+}
+
+.home-nav-links a {
+  color: #e3f2fd;
+  margin-left: 1.5rem;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.home-nav-links a:hover {
+  color: #b3c7e6;
+}
+
+/* Content Styling */
+.home-content {
+  flex: 1;
+  padding: 2rem 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.home-content h2 {
+  font-size: 2.5rem;
+  color: #000000;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  animation: fadeInTitle 1.5s ease-in-out;
+}
+
+/* Notifications Section */
+.home-notifications-section {
+  margin-top: 2rem;
+  animation: fadeInSection 1s ease-in-out;
+}
+
+.home-notifications-section h3 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.home-notifications-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* Notification Card Styling */
+.home-notification-card {
+  position: relative;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px; /* Limit card height */
+  overflow: hidden; /* Hide overflowing content */
+  transition: transform 0.3s, box-shadow 0.3s;
+  animation: fadeInCard 0.6s ease-in-out;
+  
+}
+
+.home-notification-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+.home-notification-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f3a93;
+  margin-bottom: 0.5rem;
+}
+
+.home-notification-message {
+  margin-top: 10px;
+  max-height: 100px; /* Limit message height */
+  overflow-y: auto; /* Add vertical scroll bar if content exceeds height */
+  padding-right: 8px;
+}
+
+.home-notification-message p {
+  margin: 0;
+}
+
+.toggle-message-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  width: 200px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+.toggle-message-button:hover {
+  background-color: #0056b3;
+}
+
+.home-notification-info {
+  border-left: 4px solid #1f3a93;
+}
+
+.home-notification-warning {
+  border-left: 4px solid #ff9800;
+  background-color: #fff8e1;
+}
+
+.home-notification-error {
+  border-left: 4px solid #d32f2f;
+  background-color: #fce4ec;
+}
+
+.home-deadline {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 1rem;
+  display: inline-block;
+  background-color: #f1f1f1;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+}
+
+/* Footer Styling */
+.home-footer {
+  background-color: #1f3a93;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  margin-top: auto;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.home-footer p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-notification-card {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.load-more-button {
+  display: block;
+  margin: 2rem auto;
+  background-color: #1f3a93;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.load-more-button:hover {
+  background-color: #16457e;
+}
+
+@keyframes fadeInTitle { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInCard { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideInNav { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+

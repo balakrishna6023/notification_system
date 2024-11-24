@@ -1,0 +1,63 @@
+/* General Styling */
+.about-wrapper {
+
+    background-color: #528fc7;
+    padding: 2rem 5%;
+    text-align: center;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 30px;
+  }
+  
+  .about-header {
+    font-size: 2.5rem;
+    color: #1f3a93;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-description {
+    font-size: 1.2rem;
+    color: #090909;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  
+  /* Section for Each About Paragraph */
+  .about-section {
+    margin-top: 1.5rem;
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    opacity: 0.8;
+  }
+  
+  .about-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .about-paragraph {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 0.5rem 0;
+  }
+  
+  /* Animation */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .about-section {
+    animation: slideIn 0.8s ease-out;
+  }
+  

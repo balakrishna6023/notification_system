@@ -1,0 +1,125 @@
+/* studentdashboard.css */
+
+/* Full-height Dashboard Wrapper */
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column; /* Column layout for the entire page */
+    justify-content: flex-start; /* Start items from the top */
+    align-items: center; /* Center align items horizontally */
+    padding: 20px; /* Padding around the dashboard */
+    background: linear-gradient(to bottom right, #e9eff1, #ffffff); /* Gradient background for a professional look */
+    min-height: 100vh; /* Full height to cover the viewport */
+  }
+  
+  /* Success Message */
+  .success-message {
+    color: green; /* Green color for success messages */
+    margin-bottom: 40px; /* Increased space below message for better separation */
+    font-weight: bold; /* Bold text */
+    text-align: center; /* Center the success message */
+    animation: fadeIn 1s; /* Fade in animation */
+  }
+  
+  /* Dashboard Content using Grid */
+  .dashboard-content {
+    display: grid; /* Use grid layout */
+    grid-template-columns: 1fr 2fr; /* Two columns: 1/3 for details, 2/3 for notifications */
+    gap: 20px; /* Space between columns */
+    width: 100%; /* Full width of the page */
+    max-width: 1200px; /* Maximum width for better readability */
+  }
+  
+  /* Student Details */
+  .student-details {
+    background-color: #ffffff; /* White background for container */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+    padding: 20px; /* Padding inside student details */
+  }
+  
+  /* Welcome Message */
+  .welcome-message {
+    margin: 10px 0; /* Margin around welcome message */
+  }
+  
+  /* Roll Number */
+  .roll-number {
+    margin: 10px 0; /* Margin around roll number */
+  }
+  
+  /* Email */
+  .email {
+    margin: 10px 0; /* Margin around email */
+  }
+  
+  /* Logout Button */
+  .logout-button {
+    padding: 10px 20px; /* Padding inside button */
+    background-color: #6a11cb; /* Background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+    margin-top: 20px; /* Space above button */
+    display: block; /* Block display for full width */
+  }
+  
+  /* Logout Button Hover Effect */
+  .logout-button:hover {
+    background-color: #2575fc; /* Change background on hover */
+    transform: translateY(-2px); /* Slight upward movement on hover */
+  }
+  
+  /* Notification Section */
+  .notification-section {
+    background-color: #f1f1f1; /* Light gray background for section */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside notification section */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+  }
+  
+  /* Notification List */
+  .notification-list {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+    margin-top: 20px; /* Space above the list */
+  }
+  
+  /* Notification Item */
+  .notification-item {
+    background-color: #ffffff; /* White background for items */
+    border-radius: 5px; /* Rounded corners */
+    padding: 15px; /* Padding inside item */
+    margin-bottom: 10px; /* Space between items */
+    transition: box-shadow 0.3s; /* Smooth shadow transition */
+  }
+  
+  /* Notification Deadline */
+  .notification-deadline {
+    font-size: 0.9em; /* Smaller font for deadline */
+    color: #888; /* Gray color for deadline */
+  }
+  
+  /* Notification Item Hover Effect */
+  .notification-item:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+  }
+  
+  /* Fade-in Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0; /* Start fully transparent */
+    }
+    to {
+      opacity: 1; /* End fully opaque */
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .dashboard-content {
+      grid-template-columns: 1fr; /* Stack elements on smaller screens */
+    }
+  }
+  

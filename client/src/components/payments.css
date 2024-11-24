@@ -1,0 +1,22 @@
+/* payments.css */
+.payments-wrapper {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .payment-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .payment-table th, .payment-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+  .payment-table th {
+    background-color: #f2f2f2;
+  }
+  

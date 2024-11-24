@@ -1,0 +1,284 @@
+const express = require("express");
+const router = express.Router();
+const schedule = require("node-schedule");
+const Notification = require("../models/Notification");
+const Student = require("../models/Student");
+const sendEmail = require("../utils/sendEmail"); // Import sendEmail function
+
+// Utility function to create notifications and send emails
+// Utility function to create notifications and send emails
+const createNotifications = async (students, title, message, deadline, criteria) => {
+  console.log("Starting notification creation..."); // Log start
+
+  // Ensure each student gets one notification
+  const notifications = students.map((student) => ({
+    title,
+    message,
+    deadline,
+    studentId: student._id,
+    criteria,
+  }));
+
+  // Log the data to be saved
+  console.log("Notifications to be saved:", notifications);
+
+  try {
+    // Save notifications once
+    await Notification.insertOne(notifications);
+    console.log("Notifications saved successfully."); // Log success
+  } catch (error) {
+    console.error("Error saving notifications:", error); // Log error if any
+  }
+
+  // Continue to send initial emails and schedule reminders
+  await sendInitialEmails(students, title, message);
+  scheduleEmailNotifications(students, title, message, deadline);
+};
+
+// Function to send initial emails to all students
+const sendInitialEmails = async (students, title, message) => {
+  for (const student of students) {
+    const emailOptions = {
+      to: student.email,
+      subject: `${title} - Notification`,
+      text: `${message}\n\nPlease take note of this important information.`,
+    };
+    try {
+      await sendEmail(emailOptions); // Send the email immediately
+      console.log(`Initial email sent to: ${student.email}`);
+    } catch (error) {
+      console.error(`Error sending initial email to ${student.email}:`, error);
+    }
+  }
+};
+
+// Function to schedule email notifications
+const scheduleEmailNotifications = (students, title, message, deadline) => {
+  const intervals = [15, 10, 5, 3, 1]; // Days before deadline
+
+  intervals.forEach((daysBefore) => {
+    const notificationDate = new Date(deadline);
+    notificationDate.setDate(notificationDate.getDate() - daysBefore);
+
+    // Schedule the job for each interval
+    schedule.scheduleJob(notificationDate, async () => {
+      for (const student of students) {
+        const emailOptions = {
+          to: student.email,
+          subject: `${title} - Reminder`,
+          text: `${message}\n\nThis is a reminder that the deadline is in ${daysBefore} days.`,
+        };
+
+        try {
+          await sendEmail(emailOptions); // Make sure this is awaited
+        } catch (error) {
+          console.error(`Error sending email to ${student.email}:`, error);
+        }
+      }
+    });
+  });
+};
+// Custom notification route
+
+router.post("/create/custom", async (req, res) => {
+  try {
+    const { title, message, deadline, criteria } = req.body;
+
+    if (!title || !message || !deadline || !criteria) {
+      return res.status(400).json({
+        message: "Title, message, deadline, and criteria are required.",
+      });
+    }
+
+    // Build a query to find students matching the criteria
+    const query = {};
+    if (criteria.jvdStatus) query.jvdStatus = criteria.jvdStatus;
+    if (criteria.semester) query.semester = criteria.semester;
+    if (criteria.year) query.year = criteria.year;
+    if (criteria.hosteller) query.hosteller = criteria.hosteller;
+    if (criteria.busFacility) query.busFacility = criteria.busFacility;
+
+    const students = await Student.find(query);
+    if (students.length === 0) {
+      return res.status(404).json({ message: "No students found with the specified criteria." });
+    }
+
+    // Call createNotifications only once with criteria included
+    await createNotifications(students, title, message, deadline, criteria);
+
+    res.status(201).json({
+      message: "Notification created and stored with custom criteria.",
+      studentCount: students.length,
+    });
+  } catch (error) {
+    console.error("Error creating custom notifications:", error);
+    res.status(500).json({
+      message: "Failed to create custom notifications.",
+      error: error.message,
+    });
+  }
+});
+
+// Non-JVD notification route
+router.post("/create/non-jvd", async (req, res) => {
+  try {
+    const { title, message, deadline } = req.body;
+
+    if (!title || !message || !deadline) {
+      return res
+        .status(400)
+        .json({ message: "Title, message, and deadline are required." });
+    }
+
+    // Find all Non-JVD students
+    const students = await Student.find({ jvdStatus: "Non-JVD" });
+    if (students.length === 0) {
+      return res.status(404).json({ message: "No Non-JVD students found." });
+    }
+
+    // Create notifications for each Non-JVD student and send emails
+    await createNotifications(students, title, message, deadline);
+
+    // Respond with the count of notified students
+    res.status(201).json({
+      message: "Notification created for all Non-JVD students.",
+      studentCount: students.length,
+    });
+  } catch (error) {
+    console.error("Error creating notification for Non-JVD students:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to create notification.",
+        error: error.message,
+      });
+  }
+});
+
+// Bus facility notification route
+router.post("/create/bus-students", async (req, res) => {
+  try {
+    const { title, message, deadline } = req.body;
+
+    if (!title || !message || !deadline) {
+      return res
+        .status(400)
+        .json({ message: "Title, message, and deadline are required." });
+    }
+
+    // Find all students with bus facility
+    const students = await Student.find({ busFacility: "Bus" });
+    if (students.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No students with bus facility found." });
+    }
+
+    // Create notifications for each bus facility student and send emails
+    await createNotifications(students, title, message, deadline);
+
+    // Respond with the count of notified students
+    res.status(201).json({
+      message: "Notification created for all bus facility students.",
+      studentCount: students.length,
+    });
+  } catch (error) {
+    console.error("Error creating notification for bus students:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to create notification.",
+        error: error.message,
+      });
+  }
+});
+
+// Hosteller notification route
+router.post("/create/hostel-students", async (req, res) => {
+  try {
+    const { title, message, deadline } = req.body;
+
+    if (!title || !message || !deadline) {
+      return res
+        .status(400)
+        .json({ message: "Title, message, and deadline are required." });
+    }
+
+    // Find all students who are hostellers
+    const students = await Student.find({ hosteller: "Hosteller" });
+    if (students.length === 0) {
+      return res.status(404).json({ message: "No hostel students found." });
+    }
+
+    // Create notifications for each hostel student and send emails
+    await createNotifications(students, title, message, deadline);
+
+    // Respond with the count of notified students
+    res.status(201).json({
+      message: "Notification created for all hostel students.",
+      studentCount: students.length,
+    });
+  } catch (error) {
+    console.error("Error creating notification for hostel students:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to create notification.",
+        error: error.message,
+      });
+  }
+});
+
+// Create notification for all students route
+router.post("/create/all", async (req, res) => {
+  try {
+    const { title, message, deadline } = req.body;
+
+    if (!title || !message || !deadline) {
+      return res
+        .status(400)
+        .json({ message: "Title, message, and deadline are required." });
+    }
+
+    // Find all students to create notifications for
+    const students = await Student.find({});
+    if (students.length === 0) {
+      return res.status(404).json({ message: "No students found to notify." });
+    }
+
+    // Create notifications for all students and send emails
+    await createNotifications(students, title, message, deadline);
+
+    res.status(201).json({
+      message: "Notification created for all students.",
+      studentCount: students.length,
+    });
+  } catch (error) {
+    console.error("Error creating notification for all students:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to create notification.",
+        error: error.message,
+      });
+  }
+});
+
+// Fetch all notifications
+router.get("/", async (req, res) => {
+  try {
+    // Fetch all notifications without populating studentId
+    const notifications = await Notification.find();
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res
+      .status(500)
+      .json({
+        message: "Failed to fetch notifications.",
+        error: error.message,
+      });
+  }
+});
+
+module.exports = router;
