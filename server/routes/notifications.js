@@ -1,25 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Queue = require("bull");
 const Notification = require("../models/Notification");
 const Student = require("../models/Student");
 const sendEmail = require("../utils/sendEmail"); // Utility function for sending emails
 const schedule = require("node-schedule");
-const { DateTime } = require('luxon');
-const notificationQueue = new Queue("notification-queue");
-
-notificationQueue.process(async (job) => {
-  const { notificationId, daysBefore } = job.data;
-  const notification = await Notification.findById(notificationId);
-  if (notification) {
-    await sendNotificationReminder(notification);
-    console.log(
-      `Reminder sent for notification ID: ${notificationId}, ${daysBefore} days before.`
-    );
-  } else {
-    console.error(`Notification ID ${notificationId} not found.`);
-  }
-});
 
 // Utility function to send emails to students
 const sendEmailsToStudents = async (students, title, message, deadline) => {
@@ -55,22 +39,26 @@ const sendEmailsToStudents = async (students, title, message, deadline) => {
 const scheduleNotificationReminders = async (notification) => {
   const intervals = [15, 10, 5, 3, 1]; // Days before the deadline
 
-  // Convert deadline from IST to Pacific Time (US West)
-  const deadlineInOregonTime = DateTime.fromISO(notification.deadline, { zone: 'Asia/Kolkata' }) // IST
-    .setZone('America/Los_Angeles') // Convert to Oregon time (Pacific Time)
-    .toJSDate(); // Convert back to a JavaScript Date object
-
   for (const daysBefore of intervals) {
-    const notificationDate = new Date(deadlineInOregonTime);
+    const notificationDate = new Date(notification.deadline);
     notificationDate.setDate(notificationDate.getDate() - daysBefore);
 
-    // If the scheduled reminder time is in the future
+    // Ensure the scheduled time is in the future
     if (notificationDate > new Date()) {
+      const jobData = { notificationId: notification._id, daysBefore };
+
       try {
-        await notificationQueue.add(
-          { notificationId: notification._id, daysBefore },
-          { delay: notificationDate - new Date() } // Delay in milliseconds
+        // Store job in MongoDB
+        await Notification.updateOne(
+          { _id: notification._id },
+          { $push: { scheduledJobs: { jobData, runAt: notificationDate } } }
         );
+
+        // Schedule job
+        schedule.scheduleJob(notificationDate, () => {
+          sendNotificationReminder(notification);
+        });
+
         console.log(`Reminder scheduled for ${daysBefore} days before.`);
       } catch (error) {
         console.error("Error scheduling notification reminder:", error);
@@ -78,6 +66,7 @@ const scheduleNotificationReminders = async (notification) => {
     }
   }
 };
+
 
 // Function to send notification reminders to students
 const sendNotificationReminder = async (notification) => {
@@ -186,4 +175,3 @@ router.get("/notifications", async (req, res) => {
 });
 
 module.exports = router;
-//8:48
