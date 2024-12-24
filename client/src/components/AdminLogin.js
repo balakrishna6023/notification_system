@@ -15,7 +15,7 @@ const AdminLogin = () => {
 
     try {
       const response = await axios.post(
-        'https://notification-system-6rkc.onrender.com/api/auth/login/admin',
+        'https://https://notification-system-fkzg.onrender.com/api/auth/login/admin',
         { email, password }
       );
       localStorage.setItem('token', response.data.token);
