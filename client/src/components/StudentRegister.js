@@ -20,7 +20,7 @@ const StudentRegister = () => {
     setLoading(true); // Start loading state
 
     try {
-      await axios.post('https://notification-system-6rkc.onrender.com/api/auth/register/student', {
+      await axios.post('https://notification-system-fkzg.onrender.com/api/auth/register/student', {
         rollNo,
         email,
         password,
