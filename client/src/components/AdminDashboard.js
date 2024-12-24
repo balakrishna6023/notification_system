@@ -23,7 +23,7 @@ const AdminDashboard = () => {
           return;
         }
         // Fetch admin details
-        const response = await axios.get('https://notification-system-6rkc.onrender.com/api/admin/details', {
+        const response = await axios.get('https://notification-system-fkzg.onrender.com/api/admin/details', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
