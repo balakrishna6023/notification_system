@@ -17,7 +17,7 @@ const StudentLogin = () => {
 
     try {
       const response = await axios.post(
-        "https://notification-system-fkzg.onrender.com/api/auth/login/student",
+        "https://notification-system-1-lkev.onrender.com/api/auth/login/student",
         { email, password }
       );
 
