@@ -24,7 +24,7 @@ const NotificationForm = () => {
     event.preventDefault();
     setError(null);
 
-    const endpoint = `https://https://notification-system-fkzg.onrender.com/api/notifications/create/${type}-notification`;
+    const endpoint = `https://notification-system-fkzg.onrender.com/api/notifications/create/${type}-notification`;
     const payload = { title, message, deadline };
 
     if (type === 'custom') {
