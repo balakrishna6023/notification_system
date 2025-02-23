@@ -24,7 +24,7 @@ const NotificationForm = () => {
     event.preventDefault();
     setError(null);
 
-    const endpoint = `https://notification-system-1-lkev.onrender.com/api/notifications/create/${type}-notification`;
+    const endpoint = `https://notification-system-3oj8.onrender.com/api/notifications/create/${type}-notification`;
     const payload = { title, message, deadline };
 
     if (type === 'custom') {
