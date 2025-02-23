@@ -25,7 +25,7 @@ const StudentDashboard = () => {
         }
 
         // Fetch student details based on the email
-        const studentResponse = await axios.get('https://notification-system-1-lkev.onrender.com/api/student/details', {
+        const studentResponse = await axios.get('https://notification-system-3oj8.onrender.com/api/student/details', {
           params: { email }, // Pass email as a query parameter
         });
 
@@ -37,7 +37,7 @@ const StudentDashboard = () => {
         }
 
         // Fetch notifications based on the email
-        const notificationsResponse = await axios.get('https://notification-system-1-lkev.onrender.com/api/student/notifications', {
+        const notificationsResponse = await axios.get('https://notification-system-3oj8.onrender.com/api/student/notifications', {
           params: { email }, // Pass email as a query parameter
         });
 
