@@ -16,7 +16,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('https://notification-system-1-lkev.onrender.com/api/notifications/notifications');
+        const response = await axios.get('https://notification-system-3oj8.onrender.com/api/notifications/notifications');
         const currentDate = new Date();
 
         // Separate live and expired notifications
